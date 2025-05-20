@@ -30,6 +30,21 @@ def get_remote_url(repo_path):
         return None
 
 
+def get_owner_and_repo_name(remote_url):
+    owner, repo_name = None, None
+
+    if remote_url.startswith("git@"):
+        owner_repo_name = remote_url.split(":")[1]
+        owner, repo_name = owner_repo_name.split("/")
+        repo_name = repo_name.replace(".git", "")
+
+    elif remote_url.startswith("https://"):
+        owner, repo_name = remote_url.split("/")[-2:]
+        repo_name = repo_name.replace(".git", "")
+
+    return owner, repo_name
+
+
 print(f"[INFO] Scanning workspace directory: {WORKSPACE_DIR}")
 
 git_repositories = get_git_repositories(WORKSPACE_DIR)
@@ -45,5 +60,14 @@ for index, repo in enumerate(git_repositories):
         print(f"[INFO] Remote URL: {remote_url}")
     else:
         print(f"[ERROR] No remote URL found for {repo}")
+        continue
+
+    owner, repo_name = get_owner_and_repo_name(remote_url)
+    if owner and repo_name:
+        print(f"[INFO] Owner: {owner}, Repository Name: {repo_name}")
+    else:
+        print(
+            f"[ERROR] Unable to parse owner and repository name from URL: {remote_url}"
+        )
 
 print(f"[INFO] Finished scanning workspace directory.")
