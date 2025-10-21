@@ -53,21 +53,22 @@ total_repos = len(git_repositories)
 print(f"[INFO] Found {total_repos} git repositories in the workspace directory.")
 
 for index, repo in enumerate(git_repositories):
-    print(f"[INFO] Repository {index + 1}/{total_repos}: {repo}")
+    index_indicator = f"{str(index + 1).zfill(len(str(total_repos)))}/{total_repos}"
 
     remote_url = get_remote_url(repo)
     if remote_url:
-        print(f"[INFO] Remote URL: {remote_url}")
+        print(f"[INFO][{index_indicator}] {remote_url}")
     else:
-        print(f"[ERROR] No remote URL found for {repo}")
+        print(f"[ERROR][{index_indicator}] No remote URL found for {repo}")
         continue
 
     owner, repo_name = get_owner_and_repo_name(remote_url)
     if owner and repo_name:
-        print(f"[INFO] Owner: {owner}, Repository Name: {repo_name}")
+        print(f"[INFO][{index_indicator}] {owner}")
+        print(f"[INFO][{index_indicator}] {repo_name}")
     else:
         print(
-            f"[ERROR] Unable to parse owner and repository name from URL: {remote_url}"
+            f"[ERROR][{index_indicator}] Unable to parse owner and repository name from URL: {remote_url}"
         )
 
 print(f"[INFO] Finished scanning workspace directory.")
