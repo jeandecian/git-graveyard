@@ -1,7 +1,8 @@
+from sys import argv
 import os
 import subprocess
 
-WORKSPACE_DIR = "/path/to/your/workspace"
+WORKSPACE_DIR = argv[1]
 
 
 def get_git_repositories(workspace_dir):
